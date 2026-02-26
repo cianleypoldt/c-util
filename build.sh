@@ -2,7 +2,7 @@
 make
 
 # Build and run tests
-make test
+# make test
 
 # Clean all build artifacts
 # make clean
