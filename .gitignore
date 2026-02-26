@@ -1,0 +1,10 @@
+*.o
+*.a
+*.t
+*.d
+
+*compile_commands.json
+
+.cache*
+
+build
