@@ -40,18 +40,27 @@ SM_id SM_add(SlotMap* sm, const void* data) {
 void SM_remove_at_id(SlotMap* sm, SM_id id) {
         size_t array_index = SM_get_index(sm, id);
         FL_remove_at(&sm->index_map, (size_t) id);
+
+        for (size_t i = 0; i < sm->index_map.max_index; i++) {
+                size_t* index_ptr = (size_t*) FL_at(&sm->index_map, i);
+                if (*index_ptr > array_index) {
+                        (*index_ptr)--;
+                }
+        }
         DA_remove_at(&sm->data, array_index);
 }
 
 void SM_remove_swap_at_id(SlotMap* sm, SM_id id) {
         size_t array_index = SM_get_index(sm, id);
-
         size_t last_index = sm->data.count - 1;
-
         DA_remove_swap_at(&sm->data, array_index);
 
         if (array_index != last_index) {
                 for (size_t i = 0; i < sm->index_map.max_index; i++) {
+                        /* Skip the slot being removed to avoid updating it. */
+                        if ((SM_id) i == id) {
+                                continue;
+                        }
                         size_t* index_ptr = (size_t*) FL_at(&sm->index_map, i);
                         if (!index_ptr) {
                                 continue;
@@ -62,6 +71,5 @@ void SM_remove_swap_at_id(SlotMap* sm, SM_id id) {
                         }
                 }
         }
-
         FL_remove_at(&sm->index_map, (size_t) id);
 }

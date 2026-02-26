@@ -11,14 +11,14 @@ BUILD_DIR  := build
 TEST_DIR   := tests
 
 # Sources and objects
-SRC := $(SRC_DIR)/alloc.c $(SRC_DIR)/debug.c $(SRC_DIR)/free_list.c $(SRC_DIR)/dynamic_array.c
+SRC := $(SRC_DIR)/alloc.c $(SRC_DIR)/debug.c $(SRC_DIR)/free_list.c $(SRC_DIR)/dynamic_array.c $(SRC_DIR)/slot_map.c
 OBJ := $(patsubst %.c,$(BUILD_DIR)/%.o,$(notdir $(SRC)))
 DEP := $(OBJ:.o=.d)
-LIB := $(BUILD_DIR)/libmath.a
+LIB := $(BUILD_DIR)/libutil.a
 
 # Test
-TEST_SRC := $(TEST_DIR)/test_linalg.c
-TEST_BIN := $(BUILD_DIR)/test_linalg.t
+TEST_SRC := $(TEST_DIR)/test_array.c
+TEST_BIN := $(BUILD_DIR)/test_array.t
 
 .PHONY: all clean test compile_commands
 
