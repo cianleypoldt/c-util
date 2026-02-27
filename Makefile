@@ -11,7 +11,7 @@ BUILD_DIR  := build
 TEST_DIR   := tests
 
 # Sources and objects
-SRC := $(SRC_DIR)/alloc.c $(SRC_DIR)/debug.c $(SRC_DIR)/free_list.c $(SRC_DIR)/dynamic_array.c $(SRC_DIR)/slot_map.c
+SRC := $(SRC_DIR)/slotmap.c $(SRC_DIR)/freelist.c $(SRC_DIR)/dynamic_array.c
 OBJ := $(patsubst %.c,$(BUILD_DIR)/%.o,$(notdir $(SRC)))
 DEP := $(OBJ:.o=.d)
 LIB := $(BUILD_DIR)/libutil.a
