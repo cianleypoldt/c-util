@@ -1,5 +1,8 @@
 #include "dynamic_array.h"
 
+#include <assert.h>
+#include <stddef.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -19,6 +22,12 @@ dynamic_array_t *da_create(size_t element_size)
 	da->capacity = ARRAY_BASE_COUNT;
 	da->data = malloc(element_size * ARRAY_BASE_COUNT);
 
+	if (!da || !da->data) {
+		fprintf(stderr, "Fatal: Memory allocation failed.\n");
+		fflush(stderr);
+		abort();
+	}
+
 	return da;
 }
 
@@ -26,12 +35,11 @@ void da_delete(dynamic_array_t *da)
 {
 	free(da->data);
 	free(da);
-	da = NULL;
 }
 
 void *da_at(const dynamic_array_t *da, size_t index)
 {
-	return (unsigned char *)da->data + index * da->element_size;
+	return (void *)((char *)da->data + index * da->element_size);
 }
 
 void da_swap_elements(dynamic_array_t *da, size_t index_a, size_t index_b)
@@ -43,9 +51,14 @@ void da_swap_elements(dynamic_array_t *da, size_t index_a, size_t index_b)
 	free(temp);
 }
 
-void da_resize(dynamic_array_t *da, size_t capacity)
+void da_reserve(dynamic_array_t *da, size_t capacity)
 {
 	da->data = realloc(da->data, da->element_size * capacity);
+	if (!da->data) {
+		fprintf(stderr, "Fatal: Memory allocation failed.\n");
+		fflush(stderr);
+		abort();
+	}
 	da->capacity = capacity;
 
 	if (da->length > da->capacity) {
@@ -53,10 +66,22 @@ void da_resize(dynamic_array_t *da, size_t capacity)
 	}
 }
 
+void da_resize(dynamic_array_t *da, size_t new_length)
+{
+	da_reserve(da, new_length);
+
+	if (new_length > da->length) {
+		size_t diff = new_length - da->length;
+		memset(da_at(da, da->length), 0, diff * da->element_size);
+	}
+
+	da->length = new_length;
+}
+
 void da_append(dynamic_array_t *da, const void *data)
 {
 	if (da->length >= da->capacity) {
-		da_resize(da, da->capacity * ARRAY_RESIZE_FACTOR);
+		da_reserve(da, da->capacity * ARRAY_RESIZE_FACTOR);
 	}
 	memcpy(da_at(da, da->length), data, da->element_size);
 	da->length++;
@@ -76,7 +101,7 @@ void da_remove_at(dynamic_array_t *da, size_t index)
 	if (da->length < da->capacity /
 				 (ARRAY_RESIZE_FACTOR * ARRAY_RESIZE_FACTOR) &&
 	    da->capacity > ARRAY_BASE_COUNT) {
-		da_resize(da, da->capacity / ARRAY_RESIZE_FACTOR);
+		da_reserve(da, da->capacity / ARRAY_RESIZE_FACTOR);
 	}
 }
 
@@ -87,9 +112,24 @@ void da_remove_swap_at(dynamic_array_t *da, size_t index)
 		       da->element_size);
 	}
 	da->length--;
+	if (da->length < da->capacity /
+				 (ARRAY_RESIZE_FACTOR * ARRAY_RESIZE_FACTOR) &&
+	    da->capacity > ARRAY_BASE_COUNT) {
+		da_reserve(da, da->capacity / ARRAY_RESIZE_FACTOR);
+	}
 }
 
 index_t da_length(dynamic_array_t *da)
 {
 	return da->length;
+}
+
+index_t da_capacity(dynamic_array_t *da)
+{
+	return da->capacity;
+}
+
+size_t da_element_size(dynamic_array_t *da)
+{
+	return da->element_size;
 }
