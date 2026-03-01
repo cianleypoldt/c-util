@@ -38,7 +38,7 @@ void sm_delete(slotmap_t *sm)
 int sm_id_exists(const slotmap_t *sm, sm_id_t id)
 {
 	index_t *index = (index_t *)fl_at_occup(sm->index_map, id.map_index);
-	if (index && *(gen_t *)da_at(sm->generations, *index) == id.gen) {
+	if (index && *(gen_t *)da_at(sm->generations, id.map_index) == id.gen) {
 		return 1;
 	};
 	return 0;
@@ -47,7 +47,8 @@ int sm_id_exists(const slotmap_t *sm, sm_id_t id)
 size_t sm_get_index(const slotmap_t *sm, sm_id_t id)
 {
 	index_t *index = (index_t *)fl_at_occup(sm->index_map, id.map_index);
-	if (!index || *(gen_t *)da_at(sm->generations, *index) != id.gen) {
+	if (!index ||
+	    *(gen_t *)da_at(sm->generations, id.map_index) != id.gen) {
 		fprintf(stderr, "Fatal: Invalid ID [index: %zu; gen: %zu].\n",
 			(size_t)id.map_index, (size_t)id.gen);
 		fflush(stderr);
@@ -108,10 +109,7 @@ void sm_remove_id(slotmap_t *sm, sm_id_t id)
 
 	index_t id_of_last_dense =
 		*(index_t *)da_at(sm->dense_to_sparse, da_length(sm->data) - 1);
-	printf("array index: %zu; last dense index: %zu; id: %zu\n",
-	       array_index, da_length(sm->data) - 1, id_of_last_dense);
-	fflush(stdout);
-	printf(" .. ");
+
 	fl_remove_at(sm->index_map, id.map_index);
 	(*(index_t *)da_at(sm->generations, id.map_index))++;
 
