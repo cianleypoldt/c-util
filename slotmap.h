@@ -21,6 +21,8 @@ void sm_delete(slotmap_t *sm);
 int sm_id_exists(const slotmap_t *sm, sm_id_t id);
 index_t sm_get_index(const slotmap_t *sm, sm_id_t id);
 void *sm_at_id(const slotmap_t *sm, sm_id_t id);
+void *sm_at_index(const slotmap_t *sm, index_t index);
+index_t sm_dense_length(const slotmap_t *sm);
 void sm_swap_elements(slotmap_t *sm, sm_id_t id_a, sm_id_t id_b);
 sm_id_t sm_add(slotmap_t *sm, const void *data);
 void sm_remove_id(slotmap_t *sm, sm_id_t id);

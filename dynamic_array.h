@@ -7,7 +7,7 @@ typedef struct DynamicArray dynamic_array_t;
 
 index_t da_length(dynamic_array_t *da);
 index_t da_capacity(dynamic_array_t *da);
-index_t da_element_size(dynamic_array_t *da);
+size_t da_element_size(dynamic_array_t *da);
 
 dynamic_array_t *da_create(size_t element_size);
 void da_delete(dynamic_array_t *array);

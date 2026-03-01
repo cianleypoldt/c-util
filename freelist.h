@@ -3,13 +3,15 @@
 
 #include "base.h"
 
+#define FL_OCCUPIED INDEX_MAX
+
 typedef char fl_occup_bool_t;
 
 typedef struct FreeList freelist_t;
 
 index_t fl_length(freelist_t *fl);
 index_t fl_capacity(freelist_t *fl);
-index_t fl_element_size(freelist_t *fl);
+size_t fl_element_size(freelist_t *fl);
 
 fl_occup_bool_t *fl_occup_buffer(freelist_t *fl);
 

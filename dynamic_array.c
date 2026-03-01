@@ -37,12 +37,12 @@ void da_delete(dynamic_array_t *da)
 	free(da);
 }
 
-void *da_at(const dynamic_array_t *da, size_t index)
+void *da_at(const dynamic_array_t *da, index_t index)
 {
 	return (void *)((char *)da->data + index * da->element_size);
 }
 
-void da_swap_elements(dynamic_array_t *da, size_t index_a, size_t index_b)
+void da_swap_elements(dynamic_array_t *da, index_t index_a, index_t index_b)
 {
 	void *temp = malloc(da->element_size);
 	memcpy(temp, da_at(da, index_b), da->element_size);
@@ -51,7 +51,7 @@ void da_swap_elements(dynamic_array_t *da, size_t index_a, size_t index_b)
 	free(temp);
 }
 
-void da_reserve(dynamic_array_t *da, size_t capacity)
+void da_reserve(dynamic_array_t *da, index_t capacity)
 {
 	da->data = realloc(da->data, da->element_size * capacity);
 	if (!da->data) {
@@ -66,7 +66,7 @@ void da_reserve(dynamic_array_t *da, size_t capacity)
 	}
 }
 
-void da_resize(dynamic_array_t *da, size_t new_length)
+void da_resize(dynamic_array_t *da, index_t new_length)
 {
 	da_reserve(da, new_length);
 
@@ -87,7 +87,7 @@ void da_append(dynamic_array_t *da, const void *data)
 	da->length++;
 }
 
-void da_remove_at(dynamic_array_t *da, size_t index)
+void da_remove_at(dynamic_array_t *da, index_t index)
 {
 	if (da->length == 0)
 		return;
@@ -105,7 +105,7 @@ void da_remove_at(dynamic_array_t *da, size_t index)
 	}
 }
 
-void da_remove_swap_at(dynamic_array_t *da, size_t index)
+void da_remove_swap_at(dynamic_array_t *da, index_t index)
 {
 	if (index != da->length - 1) {
 		memcpy(da_at(da, index), da_at(da, da->length - 1),

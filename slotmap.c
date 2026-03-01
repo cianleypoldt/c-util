@@ -44,7 +44,7 @@ int sm_id_exists(const slotmap_t *sm, sm_id_t id)
 	return 0;
 }
 
-size_t sm_get_index(const slotmap_t *sm, sm_id_t id)
+index_t sm_get_index(const slotmap_t *sm, sm_id_t id)
 {
 	index_t *index = (index_t *)fl_at_occup(sm->index_map, id.map_index);
 	if (!index ||
@@ -71,7 +71,7 @@ void *sm_at_id(const slotmap_t *sm, sm_id_t id)
 	return da_at(sm->data, index);
 }
 
-void *sm_at_index(slotmap_t *sm, index_t index)
+void *sm_at_index(const slotmap_t *sm, index_t index)
 {
 	return da_at(sm->data, index);
 }
@@ -80,6 +80,11 @@ void sm_swap_elements(slotmap_t *sm, sm_id_t id_a, sm_id_t id_b)
 {
 	da_swap_elements(sm->data, sm_get_index(sm, id_a),
 			 sm_get_index(sm, id_b));
+}
+
+index_t sm_dense_length(const slotmap_t *sm)
+{
+	return da_length(sm->data);
 }
 
 sm_id_t sm_add(slotmap_t *sm, const void *data)

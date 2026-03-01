@@ -156,14 +156,17 @@ static void test_remove_last_of_many(void)
 
 static void test_remove_odd_indices(void)
 {
-	TEST("remove odd-indexed elements, verify even survive intact");
+	TEST("remove odd-indexed elements, verify even survive intact\n");
 	slotmap_t *sm = sm_create(sizeof(struct vec2));
 	sm_id_t ids[10];
 	for (int i = 0; i < 10; i++)
 		ids[i] = add_vec(sm, i, 10.0 - i);
 	for (int i = 0; i < 10; i++)
-		if (i % 2)
+		if (i % 2) {
 			sm_remove_id(sm, ids[i]);
+			printf("%i\n", i);
+			fflush(stdout);
+		}
 	for (int i = 0; i < 10; i++) {
 		if (i % 2) {
 			ASSERT(!sm_id_exists(sm, ids[i]),
