@@ -3,9 +3,10 @@
 
 #include "base.h"
 
-#define SM_INVALID_INDEX (size_t)-1
-
 typedef size_t gen_t;
+
+#define SM_INVALID_INDEX (index_t)(-1)
+#define SM_INVALID_GENERATION (gen_t)(-1)
 
 typedef struct sm_id_t sm_id_t;
 
@@ -26,5 +27,7 @@ index_t sm_dense_length(const slotmap_t *sm);
 void sm_swap_elements(slotmap_t *sm, sm_id_t id_a, sm_id_t id_b);
 sm_id_t sm_add(slotmap_t *sm, const void *data);
 void sm_remove_id(slotmap_t *sm, sm_id_t id);
+
+sm_id_t sm_invalid_id();
 
 #endif

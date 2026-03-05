@@ -126,3 +126,11 @@ void sm_remove_id(slotmap_t *sm, sm_id_t id)
 	da_remove_swap_at(sm->dense_to_sparse, array_index);
 	da_remove_swap_at(sm->data, array_index);
 }
+
+sm_id_t sm_invalid_id()
+{
+	sm_id_t id;
+	id.map_index = SM_INVALID_INDEX;
+	id.gen = SM_INVALID_GENERATION;
+	return id;
+}
